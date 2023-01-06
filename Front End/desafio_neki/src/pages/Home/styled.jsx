@@ -12,7 +12,8 @@ export const Container = styled.div`
 `;
 
 export const ButtonExit = styled.div`
-    margin-right: 10rem;
+    margin-right: 100%;
+    /* margin-left: 10%; */
 `;
 
 export const Logotype = styled.div`

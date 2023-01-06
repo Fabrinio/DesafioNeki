@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useContext } from "react";
 import Input from "../../components/Input/input";
 import Button from "../../components/Button/button";
 import {
@@ -10,32 +11,45 @@ import {
   Image,
   InputPassword,
 } from "./styled";
-
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../Context/dataContext";
+import {DesafioNekiApi} from "../../Service/api"
+
 
 export function Login() {
-  const passwordInput = document.getElementById("password");
-  const eyeSvg = document.getElementById("eyeSvg");
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const { packageUserData } = useContext(DataContext);
 
-  const showPassword = () => {
-    passwordInput.setAttribute("type", "text");
-    eyeSvg.setAttribute("src", "eye-off.svg");
+  const Navigation = useNavigate();
+
+  const handleLogin = async () => {
+    var tokenJwt = null;
+    try {
+      const returned = await DesafioNekiApi.post("auth/login", {
+        userLogin: login,
+        userPassword: password,
+      }); 
+
+      if (returned.status === 200) {
+        tokenJwt = returned.data;
+        console.log("Retorno Token:" + JSON.stringify(tokenJwt));
+
+        packageUserData(tokenJwt["jwt-token"]);
+
+        Navigation("/home");
+      }
+    } catch (error) {}
   };
 
-  const hidePassword = () => {
-    passwordInput.setAttribute("type", "password");
-    eyeSvg.setAttribute("src", "eye.svg");
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
-  const eyeClick = () => {
-    const inputTypeIsPassword = passwordInput.type == "password";
-
-    if (inputTypeIsPassword) {
-      showPassword();
-      console.log("teste senha on");
+  const PasswordView = () => {
+    if (showPassword != true) {
+      setShowPassword(true);
     } else {
-      hidePassword();
-     console.log("teste senhha offf")
+      setShowPassword(false);
     }
   };
 
@@ -44,28 +58,25 @@ export function Login() {
       <Content>
         <Words>Login</Words>
         {/* falta definir os sets */}
-        <Input type="email" placeholder="Digite seu E-mail" />
+        <Input type="text" placeholder="Digite seu login" onChange={setLogin} />
+
         <InputPassword>
-          <Input id="password" type="password" placeholder="Digite sua Senha" />
-          <Image
-            id="eyeSvg"
-            onClick={eyeClick}
-            src="https://cdn-icons-png.flaticon.com/512/245/245428.png"
-            width="20px"
-            height="20px"
-            alt="Botão para esconder e aparecer a senha"
+          <Input
+            id="password"
+            type={showPassword == true ? "login" : "password"}
+            placeholder="Digite sua Senha"
+            onChange={setPassword}
           />
         </InputPassword>
+        <Button Text="Mostrar Senha" onClick={PasswordView}></Button>
 
         {/* falta fazer funcionar */}
-        <Link to='/home'>
-        <Button Text="Entrar" />
-        </Link>
+          <Button Text="Entrar" onClick={() => handleLogin()} />
 
         <LabelSignup>
           Não tem uma conta?
           <Link to="/sing-up">
-          <Strong> Registre-se</Strong>
+            <Strong> Registre-se</Strong>
           </Link>
         </LabelSignup>
       </Content>
