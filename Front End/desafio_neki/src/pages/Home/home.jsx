@@ -45,6 +45,10 @@ import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -79,9 +83,39 @@ export function Home() {
 
   const [value, setValue] = React.useState(30);
 
-  const handleSliderChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const notifySkillRegistration = () =>
+    toast.success("Skill Adicionada com Sucesso", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifyDeletedSkill = () =>
+    toast.success("Skill Deletada com Sucesso", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  const notifySkillUpdate = () =>
+    toast.success("Skill Atualizada com Sucesso", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
 
   const handleInputChange = (event) => {
     setValue(event.target.value === "" ? "" : Number(event.target.value));
@@ -166,6 +200,7 @@ export function Home() {
         },
         { headers: { Authorization: `Bearer ${dataUser?.token}` } }
       );
+      notifySkillRegistration();
     } catch (error) {
       console.log("Erro ao salvar a skill para este usuário!");
     }
@@ -195,6 +230,7 @@ export function Home() {
         )
       ).then((resp) => {
         console.log("O seu nível foi alterado com sucesso.");
+        notifySkillUpdate();
       });
     } catch (error) {
       console.log("Algo deu errado, tente novamente.");
@@ -206,29 +242,12 @@ export function Home() {
     DesafioNekiApi.delete(`/user_skill/${id}`, {
       headers: { Authorization: `Bearer ${dataUser?.token}` },
     })
-      .then((resp) => {
-        console.log("DELETADO COM SUCESSO DO BANCO" + id);
+      .then((resp) => {        
+        notifyDeletedSkill();
       })
-      .catch((error) => {
-        console.log("Erro no DELETE  " + JSON.stringify(error));
+      .catch((error) => {      
       });
   };
-
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#f00";
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
 
   return (
     <>
@@ -340,6 +359,7 @@ export function Home() {
                 </ListItemAvatar>
                 <ContainerSpans>
                 <Span>{skill.skill.skillName}</Span>
+                <p>‎</p>
                 <Span> {"Nível " + skill.knowledgeLevel}</Span>
                 </ContainerSpans>
                 <ContainerGridLevel>
@@ -355,8 +375,8 @@ export function Home() {
                           min: 1,
                           max: 10,
                           type: "number",
-                          "aria-labelledby": "input-slider",
-                        }}
+                          "aria-labelledby": "input-slider",                          
+                        }}                        
                       />
                     </Grid>
                   </Grid>
@@ -368,7 +388,7 @@ export function Home() {
                     }}
                     Text="Atualizar"
                   />
-
+                    <p>‎</p>
                   <MyButton
                     onClick={() => {
                       DeleteSkill(skill.userSkillId);
@@ -381,6 +401,18 @@ export function Home() {
           </>
         ))}
       </ContainerList>
+      <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
     </>
   );
 }
