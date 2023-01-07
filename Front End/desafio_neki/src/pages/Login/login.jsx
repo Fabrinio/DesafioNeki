@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useContext } from "react";
 import Input from "../../components/Input/input";
 import Button from "../../components/Button/button";
 import {
@@ -10,32 +11,70 @@ import {
   Image,
   InputPassword,
 } from "./styled";
-
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../Context/dataContext";
+import { DesafioNekiApi } from "../../Service/api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { PrivateRoute } from "../../Routes/privateRoutes";
 
 export function Login() {
-  const passwordInput = document.getElementById("password");
-  const eyeSvg = document.getElementById("eyeSvg");
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const { packageUserData } = useContext(DataContext);
 
-  const showPassword = () => {
-    passwordInput.setAttribute("type", "text");
-    eyeSvg.setAttribute("src", "eye-off.svg");
+  const Navigation = useNavigate();
+
+  const notify = () =>
+    toast.error("Login ou senha incorreta", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+
+  const handleLogin = async () => {
+    console.log(`Login: ${login} Senha: ${password}`);
+    var tokenJwt = null;
+
+    try {
+      console.log("vc pensa que o flamengo eh time");
+
+      const returned = await DesafioNekiApi.post("/auth/login", {
+        userLogin: login,
+        userPassword: password,
+      });
+
+      console.log("Mengo " + JSON.stringify(returned));
+
+      if (returned.status === 200) {
+        tokenJwt = returned.data;
+        console.log("Retono Token:" + JSON.stringify(tokenJwt));
+
+        localStorage.setItem("login_key", tokenJwt["jwt-token"]);
+        packageUserData(localStorage.getItem("login_key"));
+        
+        Navigation("/home");
+        PrivateRoute();
+      }
+    } catch (error) {
+      notify();
+    }
   };
 
-  const hidePassword = () => {
-    passwordInput.setAttribute("type", "password");
-    eyeSvg.setAttribute("src", "eye.svg");
-  };
+  const [showPassword, setShowPassword] = useState(false);
 
-  const eyeClick = () => {
-    const inputTypeIsPassword = passwordInput.type == "password";
-
-    if (inputTypeIsPassword) {
-      showPassword();
-      console.log("teste senha on");
+  const PasswordView = () => {
+    if (showPassword != true) {
+      setShowPassword(true);
     } else {
-      hidePassword();
-     console.log("teste senhha offf")
+      setShowPassword(false);
     }
   };
 
@@ -44,28 +83,40 @@ export function Login() {
       <Content>
         <Words>Login</Words>
         {/* falta definir os sets */}
-        <Input type="email" placeholder="Digite seu E-mail" />
-        <InputPassword>
-          <Input id="password" type="password" placeholder="Digite sua Senha" />
-          <Image
-            id="eyeSvg"
-            onClick={eyeClick}
-            src="https://cdn-icons-png.flaticon.com/512/245/245428.png"
-            width="20px"
-            height="20px"
-            alt="Botão para esconder e aparecer a senha"
-          />
-        </InputPassword>
+        <Input
+          type="text"
+          placeholder="Digite seu login"
+          onChange={(e) => setLogin(e.target.value)}
+        />
+
+        <Input
+          id="password"
+          type={showPassword == true ? "login" : "password"}
+          placeholder="Digite sua Senha"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <Button Text="Mostrar Senha" onClick={PasswordView}></Button>
 
         {/* falta fazer funcionar */}
-        <Link to='/home'>
-        <Button Text="Entrar" />
-        </Link>
+        <Button Text="Entrar" onClick={() => handleLogin()} />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
 
         <LabelSignup>
           Não tem uma conta?
           <Link to="/sing-up">
-          <Strong> Registre-se</Strong>
+            <Strong> Registre-se</Strong>
           </Link>
         </LabelSignup>
       </Content>
