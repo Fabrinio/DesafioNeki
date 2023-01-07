@@ -8,7 +8,7 @@ export const Container = styled.div`
   align-content: center;
   display: flex;
   margin: auto;
-  margin-top: 12rem;  
+  margin-top: 5%;  
 
   h4{
     text-align: center;

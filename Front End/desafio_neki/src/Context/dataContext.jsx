@@ -8,6 +8,7 @@ export const DataContext = createContext({});
 export const DataProvider = ({children}) =>{
     const [dataUser, setDataUser] = useState();
     
+    
 
     const packageUserData = (jwt) =>{
         var tokenDecoded = jwt_decode(jwt);
@@ -19,14 +20,14 @@ export const DataProvider = ({children}) =>{
 
     setDataUser({
         id: user?.userId,
-        userLogin: user?.login,
+        userLogin: user?.userLogin,
         token: jwt
     })}
 
     return(
         <DataContext.Provider value={{
             dataUser,
-            packageUserData,
+            packageUserData
         }}>
             {children}
             </DataContext.Provider>

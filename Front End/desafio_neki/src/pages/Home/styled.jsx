@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
-  height: 7rem;
+  height: 6%;
   background-color:#2d939c;
   align-items: center;
   align-content: center;
@@ -24,4 +24,9 @@ export const Logotype = styled.div`
 
 export const Image = styled.img`
     width: 80px;
+`;
+
+export const BemVindo = styled.h2`
+    text-align: center;
+    margin-top: 3% ;
 `;

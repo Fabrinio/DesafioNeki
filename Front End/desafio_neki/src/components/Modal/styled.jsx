@@ -2,11 +2,11 @@ import styled from "styled-components";
 
 export const ButtonModal = styled.button`
   padding: 16px 20px;
-  outline: none;
   border: none;
-  border-radius: 100%;
-  width: 50%;
-  margin-left: -15%;
+  border-radius: 5%;
+  width: 30%;
+  margin-left: 37%;
+  margin-top: 4%;
   margin-right: 10%;
   cursor: pointer;
   background-color: #233653;
@@ -18,6 +18,6 @@ export const ButtonModal = styled.button`
 `;
 
 export const Image = styled.img`
-    width: 10%;
-    height: 10%;
+    width: 60%;
+    height: 60%;
 `;

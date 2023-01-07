@@ -8,7 +8,8 @@ export const Container = styled.div`
   align-content: center;
   display: flex;
   margin: auto;
-  margin-top: 12rem;  
+  margin-top: 12rem; 
+ box-shadow: 10px 5px 5px black;
 `;
 
 export const Content = styled.div`
