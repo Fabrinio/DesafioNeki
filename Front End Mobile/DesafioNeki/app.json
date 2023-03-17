@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "DesafioNeki",
+    "slug": "DesafioNeki",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/image/Logo-Neki.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/image/Logo-Neki.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#211f1f"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/image/Logo-Neki.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

@@ -29,6 +29,7 @@ public class UserSkillService {
 		UserSkill userSkillAtualizado = userSkillRepository.findById(id).orElse(null);
 		if(userSkillAtualizado != null) {
             userSkillAtualizado.setUser(userSkill.getUser());
+			userSkillAtualizado.setUpdatedAt(userSkill.getUpdatedAt());
             userSkillAtualizado.setSkill(userSkill.getSkill());
             userSkillAtualizado.setKnowledgeLevel(userSkill.getKnowledgeLevel());
 			return userSkillRepository.save(userSkillAtualizado);
