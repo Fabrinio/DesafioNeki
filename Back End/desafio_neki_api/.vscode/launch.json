@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiLivrariaApplication<desafio_neki>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "br.com.desafio_neki.ApiLivrariaApplication",
+            "projectName": "desafio_neki",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
